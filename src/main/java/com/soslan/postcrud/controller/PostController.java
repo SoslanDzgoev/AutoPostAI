@@ -1,5 +1,7 @@
 package com.soslan.postcrud.controller;
 
+import com.soslan.postcrud.DTO.PostDto;
+import com.soslan.postcrud.mapper.PostMapper;
 import com.soslan.postcrud.model.Post;
 import com.soslan.postcrud.service.PostService;
 import org.springframework.http.ResponseEntity;
@@ -12,34 +14,40 @@ import java.util.List;
 
 public class PostController {
     private final PostService service;
+    private final PostMapper mapper;
 
-    public PostController(PostService service) {
+    public PostController(PostService service, PostMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @GetMapping
-    public List<Post> getAll() {
-        return service.findAll();
+    public List<PostDto> getAll() {
+        return mapper.toDtoList(service.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Post> getById(@PathVariable Long id) {
+    public ResponseEntity<PostDto> getById(@PathVariable Long id) {
         return service.findById(id)
+                .map(mapper::toDto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Post create(@RequestBody Post post) {
-        return service.save(post);
+    public PostDto create(@RequestBody PostDto postDto) {
+        Post entity = mapper.toEntity(postDto);
+        Post saved = service.save(entity);
+        return mapper.toDto(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Post> update(@PathVariable Long id, @RequestBody Post updatedPost) {
+    public ResponseEntity<PostDto> update(@PathVariable Long id, @RequestBody PostDto postDto) {
         return service.findById(id)
                 .map(existing -> {
-                    updatedPost.setId(id);
-                    return ResponseEntity.ok(service.save(updatedPost));
+                    postDto.setId(id);
+                    Post updated = service.save(mapper.toEntity(postDto));
+                    return ResponseEntity.ok(mapper.toDto(updated));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
