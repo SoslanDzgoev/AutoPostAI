@@ -25,5 +25,8 @@ public class Post {
     @Enumerated(EnumType.STRING)
     private Platform platform;
 
+    @Enumerated(EnumType.STRING)
+    private PostStatus status;
+
     private LocalDateTime publishAt;
 }

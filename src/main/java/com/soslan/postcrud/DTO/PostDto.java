@@ -1,6 +1,7 @@
 package com.soslan.postcrud.DTO;
 
 import com.soslan.postcrud.model.Platform;
+import com.soslan.postcrud.model.PostStatus;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -11,5 +12,6 @@ public class PostDto {
     private String text;
     private String mediaUrl;
     private Platform platform;
+    private PostStatus status;
     private LocalDateTime publishAt;
 }
