@@ -1,20 +1,21 @@
 package com.soslan.postcrud.service;
 
 import com.soslan.postcrud.model.Post;
-import com.soslan.postcrud.model.PostStatus;
 import com.soslan.postcrud.repository.PostRepository;
+import com.soslan.postcrud.service.logic.PostStatusResolver;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class PostService {
     private final PostRepository repository;
+    private final PostStatusResolver statusResolver;
 
-    public PostService(PostRepository repository) {
+    public PostService(PostRepository repository, PostStatusResolver postStatusResolver) {
         this.repository = repository;
+        this.statusResolver = postStatusResolver;
     }
 
     public List<Post> findAll() {
@@ -26,7 +27,7 @@ public class PostService {
     }
 
     public Post save(Post post) {
-        post.setStatus(determineStatus(post));
+        post.setStatus(statusResolver.determineStatus(post));
         return repository.save(post);
     }
 
@@ -34,10 +35,4 @@ public class PostService {
         repository.deleteById(id);
     }
 
-    private PostStatus determineStatus(Post post) {
-        LocalDateTime publishAt = post.getPublishAt();
-        if (publishAt == null) return PostStatus.DRAFT;
-        if (publishAt.isAfter(LocalDateTime.now())) return PostStatus.SCHEDULED;
-        return PostStatus.PUBLISHED;
-    }
 }
