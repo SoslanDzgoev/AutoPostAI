@@ -1,5 +1,6 @@
 package com.soslan.postcrud.DTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.soslan.postcrud.model.Platform;
 import com.soslan.postcrud.model.PostStatus;
 import jakarta.validation.constraints.NotBlank;
@@ -7,6 +8,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+
+import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 
 @Data
 public class PostDto {
@@ -21,7 +24,7 @@ public class PostDto {
     @NotNull(message = "Platform cannot be null")
     private Platform platform;
 
-    @NotNull(message = "Status cannot be null")
+    @JsonProperty(access = READ_ONLY)
     private PostStatus status;
 
     private LocalDateTime publishAt;
