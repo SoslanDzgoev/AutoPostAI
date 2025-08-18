@@ -1,4 +1,4 @@
-package com.soslan.postcrud.service.logic;
+package com.soslan.postcrud.service;
 
 import com.soslan.postcrud.model.Post;
 import com.soslan.postcrud.model.PostStatus;
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 @Component
-public class PostStatusResolver {
+public class PostStatusService {
 
     public PostStatus determineStatus(Post post) {
         LocalDateTime publishAt = post.getPublishAt();

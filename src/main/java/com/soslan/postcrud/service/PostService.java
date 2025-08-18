@@ -2,7 +2,6 @@ package com.soslan.postcrud.service;
 
 import com.soslan.postcrud.model.Post;
 import com.soslan.postcrud.repository.PostRepository;
-import com.soslan.postcrud.service.logic.PostStatusResolver;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,11 +11,11 @@ import java.util.UUID;
 @Service
 public class PostService {
     private final PostRepository repository;
-    private final PostStatusResolver statusResolver;
+    private final PostStatusService statusResolver;
 
-    public PostService(PostRepository repository, PostStatusResolver postStatusResolver) {
+    public PostService(PostRepository repository, PostStatusService postStatusService) {
         this.repository = repository;
-        this.statusResolver = postStatusResolver;
+        this.statusResolver = postStatusService;
     }
 
     public List<Post> findAll() {
