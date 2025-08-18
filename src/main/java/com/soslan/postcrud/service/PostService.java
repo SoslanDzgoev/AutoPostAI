@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class PostService {
@@ -22,7 +23,7 @@ public class PostService {
         return repository.findAll();
     }
 
-    public Optional<Post> findById(Long id) {
+    public Optional<Post> findById(UUID id) {
         return repository.findById(id);
     }
 
@@ -31,7 +32,7 @@ public class PostService {
         return repository.save(post);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(UUID id) {
         repository.deleteById(id);
     }
 

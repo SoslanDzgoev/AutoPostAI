@@ -1,6 +1,6 @@
 package com.soslan.postcrud.controller;
 
-import com.soslan.postcrud.DTO.PostDto;
+import com.soslan.postcrud.dto.PostDto;
 import com.soslan.postcrud.mapper.PostMapper;
 import com.soslan.postcrud.model.Post;
 import com.soslan.postcrud.service.PostService;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -31,7 +32,7 @@ public class PostController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostDto> getById(@PathVariable Long id) {
+    public ResponseEntity<PostDto> getById(@PathVariable UUID id) {
         return service.findById(id)
                 .map(mapper::toDto)
                 .map(ResponseEntity::ok)
@@ -49,18 +50,18 @@ public class PostController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PostDto> update(@PathVariable Long id, @Valid @RequestBody PostDto postDto) {
+    public ResponseEntity<PostDto> update(@PathVariable UUID id, @Valid @RequestBody PostDto postDto) {
         return service.findById(id)
                 .map(existing -> {
-                    postDto.setId(id);
-                    Post updated = service.save(mapper.toEntity(postDto));
+                    mapper.updateFromDto(postDto, existing);
+                    Post updated = service.save(existing);
                     return ResponseEntity.ok(mapper.toDto(updated));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
         if (service.findById(id).isEmpty()) {
             return ResponseEntity.notFound().build();
         }

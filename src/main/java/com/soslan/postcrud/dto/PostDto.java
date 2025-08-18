@@ -1,4 +1,4 @@
-package com.soslan.postcrud.DTO;
+package com.soslan.postcrud.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.soslan.postcrud.model.Platform;
@@ -8,12 +8,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 
 @Data
 public class PostDto {
-    private Long id;
+    @JsonProperty(access = READ_ONLY)
+    private UUID id;
 
     @NotBlank(message = "Text cannot be empty")
     private String text;
